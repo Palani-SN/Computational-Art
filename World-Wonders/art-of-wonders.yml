@@ -1,0 +1,100 @@
+
+Images :
+  - great-wall-of-china :
+        img : "World-Wonders/great-wall-of-china/base-image.jpg"
+        canny :
+            sigma : 0.05
+        dilate : 
+            mask : "World-Wonders/great-wall-of-china/dilate-mask.png"
+            kernel : [3,3]
+            iter : 5
+        erode : 
+            mask : "World-Wonders/great-wall-of-china/erode-mask.png"
+            kernel : [3,3]
+            iter : 3 
+        loc : [40.431907,116.570374]
+        clr : [0, 0, 255]
+  - chichen-itza : 
+        img : "World-Wonders/chichen-itza/base-image.jpg"
+        canny :
+            sigma : 0.2
+        dilate : 
+            mask : "World-Wonders/chichen-itza/dilate-mask.png"
+            kernel : [3,3]
+            iter : 3
+        erode : 
+            mask : "World-Wonders/chichen-itza/erode-mask.png"
+            kernel : [3,3]
+            iter : 3 
+        loc : [20.683056, -88.568651]
+        clr : [0, 165, 255]
+  - Petra :
+        img : "World-Wonders/khaznah-petra-jordan/base-image.jpg"
+        canny :
+            sigma : 0.33
+        dilate : 
+            mask : "World-Wonders/khaznah-petra-jordan/dilate-mask.png"
+            kernel : [3,3]
+            iter : 5
+        erode : 
+            mask : "World-Wonders/khaznah-petra-jordan/erode-mask.png"
+            kernel : [3,3]
+            iter : 3 
+        loc : [30.328611, 35.444167]
+        clr : [0, 255, 255]
+  - Machu Pichu :
+        img : "World-Wonders/machu-pichhu-peru/base-image.jpg"
+        canny :
+            sigma : 0.33
+        dilate : 
+            mask : "World-Wonders/machu-pichhu-peru/dilate-mask.png"
+            kernel : [3,3]
+            iter : 5
+        erode : 
+            mask : "World-Wonders/machu-pichhu-peru/erode-mask.png"
+            kernel : [3,3]
+            iter : 3 
+        loc : [-13.163136, -72.544962]
+        clr : [0, 255, 0]
+  - Christ the redeemer : 
+        img : "World-Wonders/christ-the-redeemer-rio-de-janeeiro-brazil/base-image.jpg"
+        canny :
+            sigma : 0.0
+        dilate : 
+            mask : "World-Wonders/christ-the-redeemer-rio-de-janeeiro-brazil/dilate-mask.png"
+            kernel : [15,15]
+            iter : 15
+        erode : 
+            mask : "World-Wonders/christ-the-redeemer-rio-de-janeeiro-brazil/erode-mask.png"
+            kernel : [15,15]
+            iter : 15 
+        loc : [-22.951916, -43.210487]
+        clr : [255, 0, 0]
+  - Colosseum :
+        img : "World-Wonders/colosseum/base-image.jpg"
+        canny :
+            sigma : 0.33
+        dilate : 
+            mask : "World-Wonders/colosseum/dilate-mask.png"
+            kernel : [15,15]
+            iter : 10
+        erode : 
+            mask : "World-Wonders/colosseum/erode-mask.png"
+            kernel : [15,15]
+            iter : 10 
+        loc : [41.890251, 12.492373]
+        clr : [75, 0, 130]
+  - Taj Mahal : 
+        img : "World-Wonders/taj-mahal/base-image.jpg"
+        canny :
+            sigma : 0.5
+        dilate : 
+            mask : "World-Wonders/taj-mahal/dilate-mask.png"
+            kernel : [15,15]
+            iter : 10
+        erode : 
+            mask : "World-Wonders/taj-mahal/erode-mask.png"
+            kernel : [15,15]
+            iter : 10
+        loc : [27.175015, 78.042155]
+        clr : [148, 0, 211]
