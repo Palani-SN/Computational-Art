@@ -11,24 +11,28 @@ yml_dict = yaml.safe_load(Path("World-Wonders/art-of-wonders.yml").read_text())
 class Canvas:
 
     def __init__(self, ccs:int, css:int):
-        
+        """ ccs (concentric circles), css (circle single section) """
+        # 
         self.ccs = ccs
         self.css = css
+        # Width, Height & Center of the image
         self.height = 2*(ccs*css) + 2*(css)
         self.width = 2*(ccs*css) + 2*(css)
         self.center = (self.css) + (self.ccs*self.css)
+        # Front & Back side of the art piece
         self.front = np.zeros((self.height,self.width,3), np.uint8)
         self.back = np.zeros((self.height,self.width,3), np.uint8)
 
     def write(self):
-
+        """ Writes front and back pictures as images """
+        # Write the Front and back images as output
         cv2.imwrite('front', self.front)
         cv2.imwrite('back', self.back)
 
     def make_square(self, image, color=(0, 0, 0)):
         """ Converts a rectangular image to a square by adding borders. """
         h, w = image.shape[:2]
-        size = max(h, w)  # Determine the square size
+        size = max(h, w) 
 
         # Calculate padding (equally on both sides)
         top = (size - h) // 2
@@ -42,62 +46,73 @@ class Canvas:
         return squared_image
 
     def img(self, obj):
+        """ Reads an image after resizing """
 
+        # read an image
         path = Path(obj.img)
         inp = cv2.imread(path.absolute(), cv2.IMREAD_COLOR_BGR)
+        
+        # Size normalization calculation
         height, width, channels = inp.shape
         if height >= width:
             mult = (height / self.height) +0.1
         else:
-            mult = (width / self.width) +0.1
-            
+            mult = (width / self.width) +0.1    
         new_width = int(width/mult)
         new_height = int(height/mult)
+        # returning resized image
         return cv2.resize(inp, (new_width, new_height), interpolation=cv2.INTER_LINEAR)
     
     def auto_canny(self, obj, img):
+        """ Auto Canny edge filter using sigma """
         v = np.median(img)
+        # Lower & Upper thresholds getting calculated
         lower = int(max(0, (1.0 - obj.canny.sigma) * v))
         upper = int(min(255, (1.0 + obj.canny.sigma) * v))
+        # Canny Filter applied to the input image
         edged = cv2.Canny(img, lower, upper)
         return edged
 
     def canny(self, obj, img):
-
+        """ Canny filter based on Low & High thresholds """
         return cv2.Canny(img, obj.canny.low, obj.canny.high)
     
     def dilate(self, obj, img):
+        """ Dilation filter based on custom dilation mask of the input image """
 
         path = Path(obj.dilate.mask)
         inp = cv2.imread(path.absolute(), cv2.COLOR_GRAY2BGR)
+        # Size normailzation
         height, width = inp.shape
         if height >= width:
             mult = (height / self.height) +0.1
         else:
             mult = (width / self.width) +0.1
-            
         new_width = int(width/mult)
         new_height = int(height/mult)
+        # Resized mask image
         mask = cv2.resize(inp, (new_width, new_height), interpolation=cv2.INTER_LINEAR)
-
+        # Dilation filter applied
         dilated = cv2.dilate(img, tuple(obj.dilate.kernel), iterations=obj.dilate.iter)
         masked = np.where(mask == 255, dilated, img)
         return masked
     
     def erode(self, obj, img):
+        """ Erosion filter based on custom Erosion mask of the input image """
 
         path = Path(obj.erode.mask)
         inp = cv2.imread(path.absolute(), cv2.COLOR_GRAY2BGR)
+        # Size normailzation
         height, width = inp.shape
         if height >= width:
             mult = (height / self.height) +0.1
         else:
             mult = (width / self.width) +0.1
-            
         new_width = int(width/mult)
         new_height = int(height/mult)
+        # Resized mask image
         mask = cv2.resize(inp, (new_width, new_height), interpolation=cv2.INTER_LINEAR)
-
+        # Erosion filter applied
         eroded = cv2.erode(img, tuple(obj.erode.kernel), iterations=obj.erode.iter)
         masked = np.where(mask == 255, eroded, img)
         return masked
@@ -114,8 +129,9 @@ class Canvas:
             obj = json.loads(json.dumps(v, indent=2), object_hook=lambda d: SimpleNamespace(**d))
             path = Path(obj.img)
             img = self.img(obj)
+
             edge = self.auto_canny(obj, img)
-            
+
             dilated = self.dilate(obj, edge)
             dilated_file = f"Artifacts/dilated-{path.parent.name}.jpg"
             # print(dilated_file)
@@ -133,8 +149,8 @@ class Canvas:
 
             colored = np.zeros_like(img)
             colored[merged != 0] = obj.clr
-            result_file = f"Artifacts/colored-{path.parent.name}.jpg"
             squared = self.make_square(colored)
+            result_file = f"Artifacts/colored-{path.parent.name}.jpg"
             cv2.imwrite(result_file, squared)
 
             # path = Path(v['img'])
