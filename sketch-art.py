@@ -19,12 +19,20 @@ class Computation_Art:
 
         sorted = self.parse_and_transform(imgs, ccs, css)
         # sorted.to_excel('out.xlsx')
+        factor = ccs / len(sorted)
 
         os.makedirs('Artifacts', exist_ok=True)
         # spirals = {}
         for idx, row in sorted.iterrows():
             # Calculate archimedian spiral
-            spiral = self.synth_seq(row['radius'], row['angle'], ccs, css)
+            radius_equivalent = ((idx+1)*factor*css)
+            spiral = self.synth_seq(
+                radius_equivalent,
+                # row['radius'], 
+                row['angle'], 
+                ccs, 
+                css
+            )
             # process the image as per need
             nm, img = self.refine_img(row)
             cv2.imwrite(f"Artifacts/colored-{nm}.jpg", img)
@@ -35,7 +43,7 @@ class Computation_Art:
                 radius = int((cs + 1) * css) 
                 # Circluar mask generation
                 if cs == 0:
-                    circle_mask = cv2.circle(temp, (self.center, self.center), radius, (255, 255, 255), css)
+                    circle_mask = cv2.circle(temp, (self.center, self.center), radius+int(css/2), (255, 255, 255), -1)
                 else:
                     circle_mask = cv2.circle(temp, (self.center, self.center), radius, (255, 255, 255), css)
                 # Fetching image data for circular mask
@@ -139,7 +147,7 @@ class Computation_Art:
 
         df = pd.DataFrame(imgs)
         df[['radius', 'angle']] = df.apply(self.cartesian_to_polar, axis=1)
-        return df.sort_values(by='radius')
+        return df.sort_values(by='radius').reset_index()
 
     def cartesian_to_polar(self, row):
         x, y = tuple(row['loc'])
@@ -155,5 +163,7 @@ if __name__ == '__main__':
     yml_dict = yaml.safe_load(Path("World-Wonders/art-of-wonders.yml").read_text())
 
     Computation_Art(
-        imgs=yml_dict['Images']
+        imgs=yml_dict['Images'],
+        ccs=30,
+        css=125
     )
