@@ -7,4 +7,4 @@ Related to,
 ![](https://github.com/Palani-SN/Computational-Art/blob/main/art-logic.png?raw=true)
 
 Scalability Analysis : 
-- Scalability of the propsed methodology is showcased for almost all countries in the world representing diverse geo locations : [demo.ipynb](https://github.com/Palani-SN/Computational-Art/blob/main/demo.ipynb) 
+- Scalability of the proposed methodology is showcased for almost all countries in the world representing diverse geo locations : [demo.ipynb](https://github.com/Palani-SN/Computational-Art/blob/main/demo.ipynb) 
